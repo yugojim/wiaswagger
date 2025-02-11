@@ -17,6 +17,7 @@ services:
     image: wiaswaggernginx:1.0.0
     restart: always
     ports:
+      - "80:80"
       - "8200:8200"      
     depends_on:
       - flask
