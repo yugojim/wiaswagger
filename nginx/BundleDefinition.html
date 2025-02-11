@@ -81,6 +81,8 @@
         <label><input type="checkbox" name="Practitioner" id="Practitioner" class="dependent" data-depends-on="Patient"> Practitioner</label>
         <label><input type="checkbox" name="PractitionerRole" id="PractitionerRole" class="dependent" data-depends-on="Practitioner"> PractitionerRole</label>
         <label><input type="checkbox" name="Organization" id="Organization" class="dependent" data-depends-on="Patient"> Organization</label>
+		<label><input type="checkbox" name="Claim" id="Claim" class="dependent" data-depends-on="Encounter,Patient,Practitioner,Organization"> Claim</label>
+		<label><input type="checkbox" name="ClaimResponse" id="ClaimResponse" class="dependent" data-depends-on="Patient,Organization"> ClaimResponse</label>
         <label><input type="checkbox" name="Location" id="Location" class="dependent" data-depends-on="Organization"> Location</label>
         <label><input type="checkbox" name="Condition" id="Condition" class="dependent" data-depends-on="Patient"> Condition</label>
         <label><input type="checkbox" name="AllergyIntolerance" id="AllergyIntolerance" class="dependent" data-depends-on="Patient"> AllergyIntolerance</label>

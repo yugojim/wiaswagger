@@ -3,7 +3,13 @@ info:
   title: FHIR Resource API
   description: |-
     API for managing various FHIR resources with CRUD operations. 
-
+    
+    version: 0.3.2 增加 32 resources 對應 
+    - [臺灣核心實作指引(TW Core IG)](https://build.fhir.org/ig/cctwFHIRterm/MOHW_TWCoreIG_Build/twcdi.html)
+    
+    version: 1.0.1 增加 2 resources 對應 
+    - [臺灣健保癌症用藥事前審查實作指引](https://twcore.mohw.gov.tw/ig/pas/index.html)
+    
     維護專區:
     - [緯謙科技](https://www.wiadvance.com/)    
     - [專案負責部門 : T02300 ]
@@ -14,9 +20,9 @@ info:
     
   contact:
     email: Gojim.Yu@wiadvance.com
-  version: 1.0.0
+  version: 1.0.1
 servers:
-  - url: http://localhost:5000
+  - url: http://104.215.60.228:8080/
     description: Local development server
 tags:
     - name: AllergyIntolerance
@@ -27,6 +33,14 @@ tags:
       description: 照護計畫：TW Core CarePlan Profile
     - name: CareTeam
       description: 照護團隊：TW Core CareTeam Profile
+    - name: Claim
+      description: 
+        事前審查-送核、套組檢驗、多事前審查癌藥品項：依據事前審查-Claim TWPAS Profile呈現事前審查之範例，含兩筆檢驗(查)。
+        事前審查-申復、有共病：依據事前審查-Claim TWPAS Profile呈現癌藥事前審查之範例
+    - name: ClaimResponse
+      description: ClaimResponse
+        事前審查結果-自主審查報備：依據事前審查結果-ClaimResponse TWPAS Profile呈現事前審查結果之範例
+        事前審查回覆：依據事前審查回覆-ClaimResponse TWPAS Profile呈現事前審查回覆之範例      
     - name: Composition
       description: 病摘、手術摘要報告：TW Core Composition Profile
     - name: Condition
@@ -375,7 +389,152 @@ paths:
           description: Successfully deleted resource
         '404':
           description: Resource not found
+  #Claim
+  /fhir/Claim:
+    post:
+      tags:
+        - Claim
+      summary: Create a new Claim resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Successfully created resource
+        '400':
+          description: Invalid input data
 
+  /fhir/Claim/{resource_id}:
+    get:
+      tags:
+        - Claim
+      summary: Retrieve a Claim resource by ID
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resource found
+        '404':
+          description: Resource not found
+
+    put:
+      tags:
+        - Claim
+      summary: Update a Claim resource by ID
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Successfully updated resource
+        '400':
+          description: Invalid request data
+
+    delete:
+      tags:
+        - Claim
+      summary: Delete a Claim resource by ID
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted resource
+        '404':
+          description: Resource not found
+          
+  #ClaimResponse      
+  /fhir/ClaimResponse:
+    post:
+      tags:
+        - ClaimResponse
+      summary: Create a new ClaimResponse resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Successfully created resource
+        '400':
+          description: Invalid input data
+
+  /fhir/ClaimResponse/{resource_id}:
+    get:
+      tags:
+        - ClaimResponse
+      summary: Retrieve a ClaimResponse resource by ID
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resource found
+        '404':
+          description: Resource not found
+
+    put:
+      tags:
+        - ClaimResponse
+      summary: Update a ClaimResponse resource by ID
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Successfully updated resource
+        '400':
+          description: Invalid request data
+
+    delete:
+      tags:
+        - ClaimResponse
+      summary: Delete a ClaimResponse resource by ID
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted resource
+        '404':
+          description: Resource not found
+          
   # Composition
   /fhir/Composition:
     post:
