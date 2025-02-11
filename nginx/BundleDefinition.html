@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR 資源選擇表單</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #555;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .meta-profile {
+            margin-top: 20px;
+        }
+        .meta-profile label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .meta-profile input {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .buttons {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .buttons button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .buttons button[type="reset"] {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>FHIR 資源選擇表單</h1>
+    <form id="fhirForm">
+        <!-- 資源列表 -->
+        <label><input type="checkbox" name="Patient" id="Patient"> Patient</label>
+        <label><input type="checkbox" name="Encounter" id="Encounter" class="dependent" data-depends-on="Patient"> Encounter</label>
+        <label><input type="checkbox" name="Practitioner" id="Practitioner" class="dependent" data-depends-on="Patient"> Practitioner</label>
+        <label><input type="checkbox" name="PractitionerRole" id="PractitionerRole" class="dependent" data-depends-on="Practitioner"> PractitionerRole</label>
+        <label><input type="checkbox" name="Organization" id="Organization" class="dependent" data-depends-on="Patient"> Organization</label>
+        <label><input type="checkbox" name="Location" id="Location" class="dependent" data-depends-on="Organization"> Location</label>
+        <label><input type="checkbox" name="Condition" id="Condition" class="dependent" data-depends-on="Patient"> Condition</label>
+        <label><input type="checkbox" name="AllergyIntolerance" id="AllergyIntolerance" class="dependent" data-depends-on="Patient"> AllergyIntolerance</label>
+        <label><input type="checkbox" name="Medication" id="Medication" class="dependent" data-depends-on="Patient"> Medication</label>
+        <label><input type="checkbox" name="MedicationRequest" id="MedicationRequest" class="dependent" data-depends-on="Medication"> MedicationRequest</label>
+        <label><input type="checkbox" name="MedicationDispense" id="MedicationDispense" class="dependent" data-depends-on="MedicationRequest"> MedicationDispense</label>
+        <label><input type="checkbox" name="MedicationStatement" id="MedicationStatement" class="dependent" data-depends-on="MedicationDispense"> MedicationStatement</label>
+        <label><input type="checkbox" name="CarePlan" id="CarePlan" class="dependent" data-depends-on="Patient"> CarePlan</label>
+        <label><input type="checkbox" name="CareTeam" id="CareTeam" class="dependent" data-depends-on="CarePlan"> CareTeam</label>
+        <label><input type="checkbox" name="Observation" id="Observation" class="dependent" data-depends-on="Patient"> Observation</label>
+        <label><input type="checkbox" name="DiagnosticReport" id="DiagnosticReport" class="dependent" data-depends-on="Observation"> DiagnosticReport</label>
+        <label><input type="checkbox" name="Procedure" id="Procedure" class="dependent" data-depends-on="Patient"> Procedure</label>
+        <label><input type="checkbox" name="ImagingStudy" id="ImagingStudy" class="dependent" data-depends-on="DiagnosticReport"> ImagingStudy</label>
+        <label><input type="checkbox" name="Immunization" id="Immunization" class="dependent" data-depends-on="Patient"> Immunization</label>
+        <label><input type="checkbox" name="Device" id="Device" class="dependent" data-depends-on="Patient"> Device</label>
+        <label><input type="checkbox" name="DocumentReference" id="DocumentReference" class="dependent" data-depends-on="Patient"> DocumentReference</label>
+        <label><input type="checkbox" name="Media" id="Media" class="dependent" data-depends-on="Patient"> Media</label>
+        <label><input type="checkbox" name="Goal" id="Goal" class="dependent" data-depends-on="CarePlan"> Goal</label>
+        <label><input type="checkbox" name="ServiceRequest" id="ServiceRequest" class="dependent" data-depends-on="Patient"> ServiceRequest</label>
+        <label><input type="checkbox" name="Specimen" id="Specimen" class="dependent" data-depends-on="ServiceRequest"> Specimen</label>
+        <label><input type="checkbox" name="Provenance" id="Provenance" class="dependent" data-depends-on="Patient"> Provenance</label>
+        <label><input type="checkbox" name="MessageHeader" id="MessageHeader" class="dependent" data-depends-on="Patient"> MessageHeader</label>
+        <label><input type="checkbox" name="QuestionnaireResponse" id="QuestionnaireResponse" class="dependent" data-depends-on="Patient"> QuestionnaireResponse</label>
+        <label><input type="checkbox" name="RelatedPerson" id="RelatedPerson" class="dependent" data-depends-on="Patient"> RelatedPerson</label>
+        <label><input type="checkbox" name="Bundle" id="Bundle"> Bundle</label>
+
+        <!-- Meta Profile 欄位 -->
+        <div class="meta-profile">
+            <label for="metaProfile">Meta Profile:</label>
+            <input type="text" id="metaProfile" name="metaProfile" placeholder="輸入 meta.profile 值">
+        </div>
+
+        <!-- 按鈕 -->
+        <div class="buttons">
+            <button type="reset">清除</button>
+            <button type="submit">送出</button>
+        </div>
+    </form>
+
+    <script>
+        // 獲取所有依賴的 checkbox
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        // 為每個 checkbox 添加事件監聽器
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateDependencies);
+        });
+
+        // 更新依賴項的狀態
+        function updateDependencies() {
+            checkboxes.forEach(checkbox => {
+                if (checkbox.classList.contains('dependent')) {
+                    const dependsOn = checkbox.getAttribute('data-depends-on');
+                    const dependsOnCheckbox = document.getElementById(dependsOn);
+                    if (dependsOnCheckbox && !dependsOnCheckbox.checked) {
+                        checkbox.disabled = true;
+                        checkbox.parentElement.classList.add('disabled');
+                    } else {
+                        checkbox.disabled = false;
+                        checkbox.parentElement.classList.remove('disabled');
+                    }
+                }
+            });
+        }
+
+        // 初始化時更新一次
+        updateDependencies();
+
+        // 表單提交事件
+        document.getElementById('fhirForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const selectedResources = [];
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedResources.push(checkbox.name);
+                }
+            });
+            const metaProfile = document.getElementById('metaProfile').value;
+
+            // 輸出結果
+            const result = {
+                resources: selectedResources,
+                meta: {
+                    profile: metaProfile ? [metaProfile] : []
+                }
+            };
+            console.log(result);
+            alert('表單已送出！\n結果：' + JSON.stringify(result, null, 2));
+        });
+
+        // 表單清除事件
+        document.getElementById('fhirForm').addEventListener('reset', function () {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.disabled = false;
+                checkbox.parentElement.classList.remove('disabled');
+            });
+            document.getElementById('metaProfile').value = '';
+            updateDependencies();
+        });
+    </script>
+</body>
+</html>

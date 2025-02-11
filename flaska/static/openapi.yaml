@@ -1,0 +1,1010 @@
+openapi: 3.0.3
+info:
+  title: 方鼎資訊 單張交換 to FHIR - API 使用說明書
+  description: |-
+    方鼎資訊 門診病歷 to FHIR :
+
+            API 0.1.0 based on the OpenAPI 3.0 specification.
+
+    概述 : 
+
+            將門診病歷轉成FHIR 並存入FHIR Server
+            知情同意存檔驗證機制
+
+    對象 :
+
+            門診病歷
+            
+    方法 : 
+            
+            依現行衛生福利部電子病歷FHIR推動專區公告標準，將欄位對應至FHIR相對resourceType欄位，存入FHIR Server
+
+    配套 : 
+
+            上傳後至FHIR Portal，查詢上傳資料狀態
+
+    注意事項 :
+    
+            1.Request body 內 Example Value 與 Schema 僅為說明格式，section 及 entry 重複格式不逐一說明，詳細說明請參照範例資料註解
+            2.測試時請由下方連結下載範例資料複製貼上至 Request body 內 Example Value 執行
+            3.後續維護更新責任者-緯謙科技
+
+    Some useful links:
+    - [方鼎門診病例json測試資料](/VisitNote)
+    - [方鼎知情同意json測試資料](/Consent)    
+    - [衛生福利部電子病歷FHIR推動專區](https://emr.mohw.gov.tw/myemr/fhir.html)
+    - [緯謙科技](https://www.wiadvance.com/)
+    
+    - [專案負責部門 : T02300 ]
+    - [電話 : 02-66126262]
+    - [分機 : 14711 ]
+
+    - [方鼎FHIR Portal](http://211.73.81.25:8000/)
+
+  contact:
+    email: Gojim.Yu@wiadvance.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.0
+externalDocs:
+  description: Find out more about 緯謙科技
+  url: https://www.wiadvance.com/
+servers:
+  - url: http://203.145.218.39:8100
+    description: 方鼎FHIR API
+tags:
+  - name: 交換單張
+    description: 公告交換單張標準
+    externalDocs:
+      description: 衛生福利部電子病歷FHIR推動專區
+      url: https://emr.mohw.gov.tw/myemr/fhir.html
+paths:
+  /:
+    get:
+      tags:
+        - Server
+      summary: 回傳伺服器狀態
+      description: 回傳伺服器狀態
+
+      operationId: getInventory
+      parameters: []
+      responses:
+        '200':
+          description: "Server Status : run (正常)"
+        '500':
+          description: "internal server error (內部伺服器錯誤)"
+          
+  /Consent/:
+    get:
+      tags:
+        - 知情同意
+      summary: 知情同意查詢
+      description: 知情同意查詢
+
+      operationId: getConsent
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent_ApiResponse_JSON'
+                
+  /Consent/{Consent_Id}:
+    get:
+      tags:
+        - 知情同意
+      summary: 知情同意查詢
+      description: 知情同意查詢
+
+      operationId: get_Consent_Id
+      parameters: 
+        - name: Consent_Id
+          in: path
+          description: ID of Consent to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent_ApiResponse_JSON'
+    post:
+      tags:
+        - 知情同意
+      summary: 知情同意新增
+      description: 知情同意新增
+
+      operationId: post_Consent_Id
+      parameters: 
+        - name: Consent_Id
+          in: path
+          description: ID of Consent to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent_ApiResponse_JSON'
+    put:
+      tags:
+        - 知情同意
+      summary: 知情同意變更
+      description: 知情同意變更
+
+      operationId: put_Consent_Id
+      parameters: 
+        - name: Consent_Id
+          in: path
+          description: ID of Consent to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent_ApiResponse_JSON'
+
+  /VisitNote/:
+    get:
+      tags:
+        - 門診病歷
+      summary: 取得門診病歷
+      description: 取得門診病歷資料
+      operationId: get_all_VisitNote
+      parameters: 
+        - name: Patient_Id
+          in: query
+          description: Patient_Id of VisitNote to return
+          schema:
+            type: string
+            format: string
+        - name: mtDate
+          in: query
+          description: more than date yyyy-mm-dd (2010-01-01)
+          schema:
+            type: string
+            format: string
+        - name: ltDate
+          in: query
+          description: less than date yyyy-mm-dd (2010-01-01)
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Composition_VisitNote_ApiResponse_JSON'
+                
+  /VisitNote/{VisitNote_Id}:
+    get:
+      tags:
+        - 門診病歷
+      summary: 取得門診病歷
+      description: 取得門診病歷資料
+      operationId: get_VisitNote
+      parameters: 
+        - name: VisitNote_Id
+          in: path
+          description: ID of VisitNote to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Composition_VisitNote_ApiResponse_JSON'
+    post:
+      tags:
+        - 門診病歷
+      summary: 新增門診病歷
+      description: 將門診病歷 XML轉為FHIR並儲存至FHIR server
+      operationId: add_VisitNote
+      parameters: 
+        - name: VisitNote_Id
+          in: path
+          description: ID of VisitNote to return
+          required: true
+          schema:
+            type: string
+            format: string
+      requestBody:
+        description: Composition_VisitNote
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FT_VisitNote_JSON'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Composition_VisitNote_ApiResponse_JSON'
+
+    put:
+      tags:
+        - 門診病歷
+      summary: 新增門診病歷
+      description: 將門診病歷 XML轉為FHIR並儲存至FHIR server
+      operationId: put_VisitNote
+      parameters: 
+        - name: VisitNote_Id
+          in: path
+          description: ID of VisitNote to return
+          required: true
+          schema:
+            type: string
+            format: string
+      requestBody:
+        description: Composition_VisitNote
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/FT_VisitNote_JSON'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Composition_VisitNote_ApiResponse_JSON'
+
+
+        
+components:
+  schemas:
+    ContentPackage:
+          type: object
+          properties:
+            cdp:ContentContainer:
+              type: object
+              properties:
+                cdp:StructuredContent:
+                  type: object
+                  properties:
+                    ClinicalDocument:
+                      type: object
+                      properties:
+                        typeId:
+                          type: string
+                          example: ""
+                        templateId:
+                          type: string
+                          example: ""
+                        id:
+                          type: string
+                          example: ""
+                        code:
+                          type: string
+                          example: ""
+                        title:
+                            type: string
+                            example: "門診病歷"
+                        effectiveTime:
+                          type: object
+                          properties:
+                            value:
+                              type: string
+                              example: "文件日期"
+                              xml:
+                                attribute: true
+                        confidentialityCode:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                              example: "機密性"
+                              xml:
+                                attribute: true
+                        languageCode:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                              example: "語言碼"
+                              xml:
+                                attribute: true
+                        recordTarget:
+                          type: object
+                          properties:
+                            patientRole:
+                              type: object
+                              properties:
+
+                                id:
+                                  type: object
+                                  properties:
+                                    extension:
+                                      type: string
+                                      example: "病歷號碼"
+                                      xml:
+                                        attribute: true
+                                patient:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: object
+                                      properties:
+                                        extension:
+                                          type: string
+                                          example: "身分證號"
+                                          xml:
+                                            attribute: true
+                                    name:
+                                      type: string
+                                      example: "姓名"
+                                    administrativeGenderCode:
+                                      type: object
+                                      properties:
+                                        code:
+                                          type: string
+                                          example: "性別"
+                                          xml:
+                                            attribute: true
+                                    birthTime:
+                                      type: object
+                                      properties:
+                                        value:
+                                          type: string
+                                          example: "出生日期"
+                                          xml:
+                                            attribute: true
+                                providerOrganization:
+                                      type: object
+                                      properties:
+                                        id:
+                                          type: object
+                                          properties:
+                                            extension:
+                                              type: string
+                                              example: "醫事機構代碼"
+                                              xml:
+                                                attribute: true
+                                        name:
+                                          type: string
+                                          example: "醫事機構名稱"
+                        author:
+                          type: object
+                          properties:
+                            time:
+                              type: object
+                              properties:
+                                value:
+                                  type: string
+                                  example: "醫師紀錄日期時間"
+                                  xml:
+                                    attribute: true
+                            assignedAuthor:
+                              type: object
+                              properties:
+                                id:
+                                  type: object
+                                  properties:
+                                    extension:
+                                      type: string
+                                      example: "醫師醫院代碼"
+                                      xml:
+                                        attribute: true
+                                assignedPerson:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                      example: "醫師姓名"
+                        custodian:
+                          type: object
+                          properties:
+                            assignedCustodian:
+                              type: object
+                              properties:
+                                representedCustodianOrganization:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: object
+                                      properties:
+                                        extension:
+                                          type: string
+                                          example: "醫事機構代碼"
+                                          xml:
+                                            attribute: true
+                                    name:
+                                      type: string
+                                      example: "醫事機構名稱  "
+                        componentOf:
+                          type: object
+                          properties:
+                            encompassingEncounter:
+                              type: object
+                              properties:
+                                effectiveTime:
+                                  type: object
+                                  properties:
+                                    value:
+                                      type: string
+                                      example: "門診日期"
+                                      xml:
+                                        attribute: true
+                                    location:
+                                      type: object
+                                      properties:
+                                        healthCareFacility:
+                                          type: object
+                                          properties:
+                                            location:
+                                              type: object
+                                              properties:
+                                                name:
+                                                  type: string
+                                                  example: "科別"
+                        component:
+                          type: object
+                          properties:
+                            structuredBody:
+                              type: object
+                              properties:
+                                component:
+                                  properties:
+                                    section:
+                                      properties:
+                                        code:
+                                          properties:
+                                            code:
+                                              type: string
+                                              example: "LOINC code"
+                                              xml:
+                                                attribute: true
+                                            displayName:
+                                              type: string
+                                              example: "LOINC display"
+                                              xml:
+                                                attribute: true
+                                            title:
+                                              type: string
+                                              example: "區段項目(實驗室檢查紀錄、重大傷病...)"
+                                            text :
+                                              properties:
+                                                paragraph:
+                                                  type: string
+                                                  example: "文字敘述"
+                                            entry :
+                                              properties:
+                                                observation:
+                                                  type: object
+                                                  properties:
+                                                    code:
+                                                      type: object
+                                                      properties:
+                                                        code:
+                                                          type: string
+                                                          example: "ICD 10編碼"
+                                                          xml:
+                                                            attribute: true
+                                                        displayName:
+                                                          type: string
+                                                          example: "ICD 10名稱"
+                                                          xml:
+                                                            attribute: true
+                                                    text:
+                                                      type: string
+                                                      example: "文字敘述"
+                                                observationMedia:
+                                                  type: object
+                                                  properties:
+                                                    value:
+                                                      type: string
+                                                      example: "影像檔案Base64編碼"
+          xml:
+            prefix: cdp
+    Composition_VisitNote_ApiResponse_JSON:
+      type: object
+      properties:
+        resourceType:
+          type: string
+        id:
+          type: string
+        meta:
+          type: object
+          properties:
+            versionId:
+              type: string
+            lastUpdated:
+              type: string
+            source:
+              type: string
+        language:
+          type: string
+        text:
+          type: object
+          properties:
+            status:
+              type: string
+            div:
+              type: string
+        status:
+          type: string
+        type:
+          type: object
+          properties:
+            coding:
+              type: object
+              properties:
+                system:
+                  type: string
+                code:
+                  type: string
+                display:
+                  type: string
+        subject:
+          type: object
+          properties:
+            reference:
+              type: string
+            display:
+              type: string
+        encounter:
+          type: object
+          properties:
+            reference:
+              type: string
+        date:
+          type: string
+        author:
+          type: object
+          properties:
+            reference:
+              type: string
+            display:
+              type: string
+        title:
+          type: string
+        confidentiality:
+          type: string
+        attester:
+          type: object
+          properties:
+            mode:
+              type: string
+            time:
+              type: string
+        custodian:
+          type: object
+          properties:
+            reference:
+              type: string
+            display:
+              type: string
+        section:
+          type: object
+          properties:
+            title:
+              type: string
+            code:
+              type: object
+              properties:
+                coding:
+                  type: object
+                  properties:
+                    system:
+                      type: string
+                    code:
+                      type: string
+                    display:
+                      type: string
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                div:
+                  type: string
+            entry:
+              type: object
+              properties:
+                reference:
+                  type: string
+      example:
+        resourceType: Composition
+        id: '1'
+        meta:
+          versionId: '1'
+          lastUpdated: '2023-03-08T06:42:02.621+00:00'
+          source: '#E3Wp8IdPMe08QsvA'
+        language: zh-TW
+        text:
+          status: generated
+          div: '<div xmlns=\"http://www.w3.org/1999/xhtml\">\t    \n\t\t\t<table border=\"1\">\n\t\t\t\t<caption>門診病歷</caption>\n\t\t\t\t<tr><th>身分證字號</th><th>病歷號</th><th>病人姓名</th><th>性別</th><th>出生日期</th><th>文件列印日期</th><th>醫師姓名</th><th>醫師紀錄日期時間</th><th>醫院名稱</th><th>科別</th><th>門診日期</th></tr>\n\t\t\t\t<tr><td>Z123456789</td><td>123456</td><td>趙錢孫</td><td>男</td><td>1997-01-01</td><td>2010-09-04</td><td>賴一施 </td><td>2010-09-04</td><td>國立臺灣大學醫學院附設醫院</td><td>家醫科</td><td>2010-08-10</td></tr>\n\t\t\t</table>\n\t\t</div>'
+        status: preliminary
+        type:
+          coding:
+            - system: http://loinc.org
+              code: 28579-1
+              display: Visit note
+        subject:
+          reference: https://fhirtest.uhn.ca/baseR4/Patient/129257
+          display: 趙錢孫
+        encounter:
+          reference: https://fhirtest.uhn.ca/baseR4/Encounter/129801
+        date: 2010-08-01T11:34:00
+        author:
+          - reference: https://fhirtest.uhn.ca/baseR4/Practitioner/129288
+            display: 賴一施
+        title: 門診病歷
+        confidentiality: N
+        attester:
+          - mode: professional
+            time: 2010-07-31
+        custodian:
+          reference: https://fhirtest.uhn.ca/baseR4/Organization/129188
+          display: 國立臺灣大學醫學院附設醫院
+        section:
+          - title: 實驗室檢查紀錄
+            code:
+              coding:
+                - system: http://loinc.org
+                  code: 19146-0
+                  display: Reference lab test results
+            text:
+              status: generated
+              div: '<div xmlns=\"http://www.w3.org/1999/xhtml\">\n\t\t\t\t<br/>\n\t\t\t\t<table>\n\t\t\t\t\t<tr><b>實驗室檢查紀錄:病人血型及D抗原性</b></tr>\n\t\t\t\t\t<tr>血型:B</tr>\n\t\t\t\t\t<tr>D抗原性:Rh+</tr>\n\t\t\t\t</table>\n\t\t\t</div>'
+            entry:
+                - reference: https://fhirtest.uhn.ca/baseR4/Observation/127858
+          - title: 出院診斷
+            code:
+              coding:
+                - system: http://loinc.org
+                  code: 11535-2
+                  display: Hospital discharge Dx Narrative
+            text:
+              status: generated
+              div: '<div xmlns="http://www.w3.org/1999/xhtml"><br/><table><tr><b>出院診斷:</b></tr><tr>結核病(Tuberculosis)</tr></table></div>'
+            entry:
+              - reference: https://fhirtest.uhn.ca/baseR4/Condition/128907
+    FT_VisitNote_JSON:
+      type: object
+      properties:
+        resourceType:
+          type: string
+        id:
+          type: string
+        meta:
+          type: object
+          properties:
+            versionId:
+              type: string
+            lastUpdated:
+              type: string
+            source:
+              type: string
+      example:
+        醫事機構代碼: '0401190010'
+        醫事機構名稱: '臺大醫院'
+        身分證號: 'Z123456789'
+        病歷號碼: '123456'
+        姓名: '趙錢孫'
+        性別: 'M'
+        出生日期: '2000-01-01'
+        血型: 'B'
+        D抗原性: 'Rh+'
+        過敏史: ''
+        就診年齡: '30歲5個月'
+        職業: '服務業'
+        就醫身分別: '健保'
+        門診日期: '2010-08-10'
+        科別: '家醫科'
+        主觀描述: ''
+        客觀描述: ''
+        醫師姓名: '賴一施'
+        重大傷病:
+          - 重大傷病代碼: 'D464'
+            重大傷病名稱: '再生不良性貧血'
+        診斷:
+          - 國際疾病分類代碼: 'D464'
+            國際疾病分類名稱: '再生不良性貧血'
+        處置項目:
+          - "項次": '1'
+            "處置代碼": "19009C"
+            "處置名稱": "腹部超音波，追蹤性"
+            "頻率": "一次性處置"
+            "數量": "1"
+            "單位": "次"
+            "部位": "上腹部"
+            "註記": "N"
+            "自費註記": "N"
+        處方內容:
+            "項次": 1,
+            "處方箋種類註記": "GENRL"
+            "藥品代碼": "A040130100"
+            "藥品商品名稱": "TINTENTABLETS 500MG"
+            "學名": "ACETAMINOPHEN TAB 500MG(FOIL)"
+            "劑型": "錠劑"
+            "劑量": "1"
+            "劑量單位": "錠"
+            "頻率": "每天三次飯後(TID PC)"
+            "給藥途徑": "口服"
+            "給藥日數": "4"
+            "給藥總量": "12"
+            "給藥總量單位": "錠"
+            "實際給藥總量": "12"
+            "實際給藥總量單位": "錠"
+            "磨粉註記": "N"
+            "註記": "N"
+            "自費註記": "N"
+
+    Consent_ApiResponse_JSON:
+      type: object
+      properties:
+        resourceType:
+          type: string
+        id:
+          type: string
+        meta:
+          type: object
+          properties:
+            versionId:
+              type: string
+            lastUpdated:
+              type: string
+            source:
+              type: string
+        scope:
+          type: object
+          properties:
+            coding:
+              type: object
+              properties:
+                system:
+                  type: string
+                code:
+                  type: string
+        category:
+          type: object
+          properties:
+            coding:
+              type: object
+              properties:
+                system:
+                  type: string
+                code:
+                  type: string
+        status:
+          type: string
+
+        patient:
+          type: object
+          properties:
+            reference:
+              type: string
+            display:
+              type: string
+
+        dateTime:
+          type: string
+
+        provision:
+          type: object
+          properties:
+            type:
+              type: string
+
+      example:
+        resourceType: 'Consent'
+        id: 'U221776330'
+        meta:
+          versionId: '1'
+          lastUpdated: '2023-03-08T06:42:02.621+00:00'
+          source: '#E3Wp8IdPMe08QsvA'
+        status: 'active'
+        scope:
+          coding:
+            - system: 'http://terminology.hl7.org/CodeSystem/consentscope'
+              code: 'patient-privacy'
+        category:
+          coding:
+            - system: 'http://loinc.org'
+              code: '59284-0'
+        subject:
+          reference: 'https://fhirtest.uhn.ca/baseR4/Patient/129257'
+        dateTime: '2010-08-01T11:34:00'
+        provision: 
+          type: 'permit'
+
+              
+    Composition_DischargeSummary_ApiResponse_JSON:
+      type: object
+      properties:
+        resourceType:
+          type: string
+        id:
+          type: string
+        meta:
+          type: object
+          properties:
+            versionId:
+              type: string
+            lastUpdated:
+              type: string
+            source:
+              type: string
+        language:
+          type: string
+        text:
+          type: object
+          properties:
+            status:
+              type: string
+            div:
+              type: string
+        status:
+          type: string
+        type:
+          type: object
+          properties:
+            coding:
+              type: object
+              properties:
+                system:
+                  type: string
+                code:
+                  type: string
+                display:
+                  type: string
+        subject:
+          type: object
+          properties:
+            reference:
+              type: string
+            display:
+              type: string
+        encounter:
+          type: object
+          properties:
+            reference:
+              type: string
+        date:
+          type: string
+        author:
+          type: object
+          properties:
+            reference:
+              type: string
+            display:
+              type: string
+        title:
+          type: string
+        confidentiality:
+          type: string
+        attester:
+          type: object
+          properties:
+            mode:
+              type: string
+            time:
+              type: string
+        custodian:
+          type: object
+          properties:
+            reference:
+              type: string
+            display:
+              type: string
+        section:
+          type: object
+          properties:
+            title:
+              type: string
+            code:
+              type: object
+              properties:
+                coding:
+                  type: object
+                  properties:
+                    system:
+                      type: string
+                    code:
+                      type: string
+                    display:
+                      type: string
+            text:
+              type: object
+              properties:
+                status:
+                  type: string
+                div:
+                  type: string
+            entry:
+              type: object
+              properties:
+                reference:
+                  type: string
+      example:
+        resourceType: Composition
+        id: '1'
+        meta:
+          versionId: '1'
+          lastUpdated: '2023-03-08T06:42:02.621+00:00'
+          source: '#E3Wp8IdPMe08QsvA'
+        language: zh-TW
+        text:
+          status: generated
+          div: >-
+            <div xmlns="http://www.w3.org/1999/xhtml"><table
+            border="1"><caption>出院病摘單</caption><tr><th>身分證字號</th><th>病歷號</th><th>病人姓名</th><th>性別</th><th>出生日期</th><th>文件列印日期</th><th>醫師姓名</th><th>醫師記錄日期時間</th><th>醫院名稱</th><th>住院日期</th><th>出院日期</th><th>轉出醫事機構名稱</th><th>轉入醫事機構名稱</th></tr><tr><td>Z123456789</td><td>123456</td><td>趙錢孫</td><td>男</td><td>1997-01-01</td><td>2010-08-01</td><td>賴一施
+            </td><td>2010-07-31</td><td>國立臺灣大學醫學院附設醫院</td><td>2010-07-01</td><td>2010-07-31</td><td>陽明大學附設醫院護理之家</td><td>國立臺灣大學醫學院附設醫院</td></tr></table></div>
+        status: preliminary
+        type:
+          coding:
+            - system: http://loinc.org
+              code: 18842-5
+              display: Discharge Summary
+        subject:
+          reference: https://fhirtest.uhn.ca/baseR4/Patient/129257
+          display: 趙錢孫
+        encounter:
+          reference: https://fhirtest.uhn.ca/baseR4/Encounter/129801
+        date: '2010-08-01T11:34:00'
+        author:
+          - reference: https://fhirtest.uhn.ca/baseR4/Practitioner/129288
+            display: 賴一施
+        title: 門診病歷
+        confidentiality: 'N'
+        attester:
+          - mode: professional
+            time: '2010-07-31'
+        custodian:
+          reference: https://fhirtest.uhn.ca/baseR4/Organization/129188
+          display: 國立臺灣大學醫學院附設醫院
+        section:
+          - title: 住院臆斷
+            code:
+              coding:
+                - system: http://loinc.org
+                  code: 46241-6
+                  display: Hospital admission diagnosis Narrative - Reported
+            text:
+              status: generated
+              div: <div xmlns="http://www.w3.org/1999/xhtml"><br/><table><tr><b>住院臆斷:</b></tr><tr>有軌電車乘客在交通意外事故中與機動車輛碰撞時受傷之初期照護</tr></table></div>
+            entry:
+              - reference: https://fhirtest.uhn.ca/baseR4/Condition/128907
+  securitySchemes:
+    wiadvance_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://www.wiadvance.com/oauth/authorize
+          scopes:
+            put:VisitNote: 更新門診病例
+            delete:VisitNote: 刪除門診病例
+      x-tokenInfoFunc: swagger_server.controllers.authorization_controller.check_petstore_auth
+      x-scopeValidateFunc: >-
+        swagger_server.controllers.authorization_controller.validate_scope_petstore_auth
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_api_key
